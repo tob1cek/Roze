@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roze</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+}
+
+h1{
+    color: #cc0000;
+}
+
+img{
+    max-width: 200px;
+    margin: 10px;
+    border-radius: 10px;
+}
+
+#gallery{
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Roze</h1>
+
+<p>Nahraj své fotografie:</p>
+
+<input type="file" id="upload" multiple accept="image/*">
+
+<div id="gallery"></div>
+
+<script>
+const upload = document.getElementById('upload');
+const gallery = document.getElementById('gallery');
+
+upload.addEventListener('change', () => {
+    [...upload.files].forEach(file => {
+        const img = document.createElement('img');
+        img.src = URL.createObjectURL(file);
+        gallery.appendChild(img);
+    });
+});
+</script>
+
+</body>
+</html>
