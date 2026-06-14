@@ -8,47 +8,88 @@
 <style>
 body{
     font-family: Arial, sans-serif;
-    text-align: center;
-    padding: 20px;
-}
-
-h1{
-    color: #cc0000;
+    text-align:center;
+    padding:20px;
 }
 
 img{
-    max-width: 200px;
-    margin: 10px;
-    border-radius: 10px;
+    max-width:250px;
+    border-radius:12px;
+    margin-top:10px;
 }
 
-#gallery{
-    margin-top: 20px;
+.photo{
+    margin:20px 0;
+    padding:15px;
+    border:1px solid #ddd;
+    border-radius:12px;
+}
+
+input[type="text"]{
+    width:90%;
+    padding:8px;
+    margin-top:10px;
 }
 </style>
 </head>
-
 <body>
 
-<h1>Roze</h1>
+<h1>🌹 Roze</h1>
 
-<p>Nahraj své fotografie:</p>
-
-<input type="file" id="upload" multiple accept="image/*">
+<input type="file" id="upload" accept="image/*">
+<br><br>
+<input type="text" id="caption" placeholder="Napiš popisek...">
+<br><br>
+<button onclick="savePhoto()">Přidat</button>
 
 <div id="gallery"></div>
 
 <script>
-const upload = document.getElementById('upload');
-const gallery = document.getElementById('gallery');
+let photos = JSON.parse(localStorage.getItem("rozePhotos")) || [];
 
-upload.addEventListener('change', () => {
-    [...upload.files].forEach(file => {
-        const img = document.createElement('img');
-        img.src = URL.createObjectURL(file);
-        gallery.appendChild(img);
+function renderGallery(){
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    photos.forEach(photo => {
+        const div = document.createElement("div");
+        div.className = "photo";
+
+        div.innerHTML = `
+            <img src="${photo.image}">
+            <p>${photo.caption}</p>
+        `;
+
+        gallery.appendChild(div);
     });
-});
+}
+
+function savePhoto(){
+    const file = document.getElementById("upload").files[0];
+    const caption = document.getElementById("caption").value;
+
+    if(!file) return alert("Vyber fotku");
+
+    const reader = new FileReader();
+
+    reader.onload = function(e){
+        photos.push({
+            image: e.target.result,
+            caption: caption
+        });
+
+        localStorage.setItem(
+            "rozePhotos",
+            JSON.stringify(photos)
+        );
+
+        renderGallery();
+    };
+
+    reader.readAsDataURL(file);
+}
+
+renderGallery();
 </script>
 
 </body>
